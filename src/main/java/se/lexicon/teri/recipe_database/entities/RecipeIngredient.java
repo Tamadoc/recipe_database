@@ -8,11 +8,12 @@ import java.util.UUID;
 public class RecipeIngredient {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue
     private UUID recipeIngredientId;
 
-    @OneToOne
-    @JoinColumn
+    @ManyToOne(fetch = FetchType.LAZY,
+            cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH})
+    @JoinColumn(name = "ingredient_id")
     private Ingredient ingredient;
 
     @Column(nullable = false)
@@ -21,8 +22,9 @@ public class RecipeIngredient {
     @Column(nullable = false)
     private Measurement measurement;
 
-    @ManyToOne
-    @JoinColumn
+    @ManyToOne(fetch = FetchType.LAZY,
+            cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH})
+    @JoinColumn(name = "recipe_id")
     private Recipe recipe;
 
     // Constructors
@@ -30,14 +32,6 @@ public class RecipeIngredient {
     }
 
     public RecipeIngredient(Ingredient ingredient, double amount, Measurement measurement, Recipe recipe) {
-        this.ingredient = ingredient;
-        this.amount = amount;
-        this.measurement = measurement;
-        this.recipe = recipe;
-    }
-
-    public RecipeIngredient(UUID recipeIngredientId, Ingredient ingredient, double amount, Measurement measurement, Recipe recipe) {
-        this.recipeIngredientId = recipeIngredientId;
         this.ingredient = ingredient;
         this.amount = amount;
         this.measurement = measurement;
@@ -85,6 +79,11 @@ public class RecipeIngredient {
         this.recipe = recipe;
     }
 
+    @Override
+    public int hashCode() {
+        return Objects.hash(recipeIngredientId, ingredient, amount, measurement, recipe);
+    }
+
     // Overrides
     @Override
     public boolean equals(Object o) {
@@ -96,10 +95,5 @@ public class RecipeIngredient {
         }
         RecipeIngredient that = (RecipeIngredient) o;
         return Double.compare(that.amount, amount) == 0 && Objects.equals(recipeIngredientId, that.recipeIngredientId) && Objects.equals(ingredient, that.ingredient) && measurement == that.measurement && Objects.equals(recipe, that.recipe);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(recipeIngredientId, ingredient, amount, measurement, recipe);
     }
 }

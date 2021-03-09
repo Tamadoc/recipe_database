@@ -10,20 +10,15 @@ public class Ingredient {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int ingredientId;
 
-    @Column(nullable = false, length = 100)
-    private String name;
+    @Column(nullable = false)
+    private String ingredientName;
 
     // Constructors
     public Ingredient() {
     }
 
-    public Ingredient(String name) {
-        this.name = name;
-    }
-
-    public Ingredient(int id, String name) {
-        this.ingredientId = id;
-        this.name = name;
+    public Ingredient(String ingredientName) {
+        this.ingredientName = ingredientName;
     }
 
     // Getters and setters
@@ -35,12 +30,12 @@ public class Ingredient {
         this.ingredientId = id;
     }
 
-    public String getName() {
-        return name;
+    public String getIngredientName() {
+        return ingredientName;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setIngredientName(String name) {
+        this.ingredientName = name;
     }
 
     // Overrides
@@ -53,11 +48,11 @@ public class Ingredient {
             return false;
         }
         Ingredient that = (Ingredient) o;
-        return ingredientId == that.ingredientId && name.equals(that.name);
+        return ingredientId == that.ingredientId && ingredientName.equals(that.ingredientName);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(ingredientId, name);
+        return Objects.hash(ingredientId, ingredientName);
     }
 }

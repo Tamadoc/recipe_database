@@ -5,14 +5,13 @@ import java.util.Objects;
 import java.util.UUID;
 
 @Entity
-@Table(name = "instructions")
 public class RecipeInstruction {
 
     @Id
     @GeneratedValue
     private UUID instructionId;
 
-    @Column(nullable = false, length = 1000)
+    @Column(nullable = false, length = 1500)
     private String instructions;
 
     // Constructors

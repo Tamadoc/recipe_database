@@ -1,6 +1,7 @@
 package se.lexicon.teri.recipe_database.entities;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
@@ -11,25 +12,23 @@ public class RecipeCategory {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int categoryId;
 
-    @Column(nullable = false, length = 50)
+    @Column(nullable = false)
     private String category;
 
-    @ManyToMany
-    private List<Recipe> recipeList;
+    @ManyToMany(fetch = FetchType.LAZY,
+            cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH})
+    @JoinTable(name = "category_to_recipe",
+            joinColumns = @JoinColumn(name = "category_id"),
+            inverseJoinColumns = @JoinColumn(name = "recipe_id"))
+    private List<Recipe> recipes;
 
     // Constructors
     public RecipeCategory() {
     }
 
-    public RecipeCategory(String category, List<Recipe> recipeList) {
+    public RecipeCategory(String category, List<Recipe> recipes) {
         this.category = category;
-        this.recipeList = recipeList;
-    }
-
-    public RecipeCategory(int categoryId, String category, List<Recipe> recipeList) {
-        this.categoryId = categoryId;
-        this.category = category;
-        this.recipeList = recipeList;
+        this.recipes = recipes;
     }
 
     // Getters and setters
@@ -49,12 +48,12 @@ public class RecipeCategory {
         this.category = category;
     }
 
-    public List<Recipe> getRecipeList() {
-        return recipeList;
+    public List<Recipe> getRecipes() {
+        return recipes;
     }
 
-    public void setRecipeList(List<Recipe> recipeList) {
-        this.recipeList = recipeList;
+    public void setRecipes(List<Recipe> recipes) {
+        this.recipes = recipes;
     }
 
     // Overrides
@@ -67,11 +66,30 @@ public class RecipeCategory {
             return false;
         }
         RecipeCategory that = (RecipeCategory) o;
-        return categoryId == that.categoryId && Objects.equals(category, that.category) && Objects.equals(recipeList, that.recipeList);
+        return categoryId == that.categoryId && Objects.equals(category, that.category) && Objects.equals(recipes, that.recipes);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(categoryId, category, recipeList);
+        return Objects.hash(categoryId, category, recipes);
+    }
+
+    // Convenience methods
+    public void addRecipe(Recipe recipe) {
+        if (recipes == null) {
+            recipes = new ArrayList<>();
+        }
+        if (recipe == null) throw new IllegalArgumentException("recipe is null");
+
+        recipes.add(recipe);
+    }
+
+    public void removeRecipe(Recipe recipe) {
+        if (recipes == null) {
+            recipes = new ArrayList<>();
+        }
+        if (recipe == null) throw new IllegalArgumentException("recipe is null");
+
+        recipes.remove(recipe);
     }
 }

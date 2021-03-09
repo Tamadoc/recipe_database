@@ -1,6 +1,7 @@
 package se.lexicon.teri.recipe_database.entities;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
@@ -11,34 +12,33 @@ public class Recipe {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int recipeId;
 
-    @Column(nullable = false, length = 200)
+    @Column(nullable = false)
     private String recipeName;
 
-    @OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "instruction_id")
-    private RecipeInstruction instructions;
+    private RecipeInstruction recipeInstructions;
 
-    @OneToMany
+    @OneToMany(fetch = FetchType.LAZY,
+            cascade = CascadeType.ALL,
+            mappedBy = "recipe",
+            orphanRemoval = true)
     private List<RecipeIngredient> recipeIngredients;
 
-    @ManyToMany
+    @ManyToMany(fetch = FetchType.LAZY,
+            cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH})
+    @JoinTable(name = "category_to_recipe",
+            joinColumns = @JoinColumn(name = "recipe_id"),
+            inverseJoinColumns = @JoinColumn(name = "category_id"))
     private List<RecipeCategory> categories;
 
     // Constructors
     public Recipe() {
     }
 
-    public Recipe(String recipeName, RecipeInstruction instructions, List<RecipeIngredient> recipeIngredients, List<RecipeCategory> categories) {
+    public Recipe(String recipeName, RecipeInstruction recipeInstructions, List<RecipeIngredient> recipeIngredients, List<RecipeCategory> categories) {
         this.recipeName = recipeName;
-        this.instructions = instructions;
-        this.recipeIngredients = recipeIngredients;
-        this.categories = categories;
-    }
-
-    public Recipe(int recipeId, String recipeName, RecipeInstruction instructions, List<RecipeIngredient> recipeIngredients, List<RecipeCategory> categories) {
-        this.recipeId = recipeId;
-        this.recipeName = recipeName;
-        this.instructions = instructions;
+        this.recipeInstructions = recipeInstructions;
         this.recipeIngredients = recipeIngredients;
         this.categories = categories;
     }
@@ -68,12 +68,12 @@ public class Recipe {
         this.recipeIngredients = recipeIngredients;
     }
 
-    public RecipeInstruction getInstructions() {
-        return instructions;
+    public RecipeInstruction getRecipeInstructions() {
+        return recipeInstructions;
     }
 
-    public void setInstructions(RecipeInstruction instructions) {
-        this.instructions = instructions;
+    public void setRecipeInstructions(RecipeInstruction instructions) {
+        this.recipeInstructions = instructions;
     }
 
     public List<RecipeCategory> getCategories() {
@@ -82,6 +82,11 @@ public class Recipe {
 
     public void setCategories(List<RecipeCategory> categories) {
         this.categories = categories;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(recipeId, recipeName, recipeIngredients, recipeInstructions, categories);
     }
 
     // Overrides
@@ -94,11 +99,55 @@ public class Recipe {
             return false;
         }
         Recipe recipe = (Recipe) o;
-        return recipeId == recipe.recipeId && Objects.equals(recipeName, recipe.recipeName) && Objects.equals(recipeIngredients, recipe.recipeIngredients) && Objects.equals(instructions, recipe.instructions) && Objects.equals(categories, recipe.categories);
+        return recipeId == recipe.recipeId && Objects.equals(recipeName, recipe.recipeName) && Objects.equals(recipeIngredients, recipe.recipeIngredients) && Objects.equals(recipeInstructions, recipe.recipeInstructions) && Objects.equals(categories, recipe.categories);
     }
 
-    @Override
-    public int hashCode() {
-        return Objects.hash(recipeId, recipeName, recipeIngredients, instructions, categories);
+    // Convenience methods
+    public void addRecipeIngredient(RecipeIngredient recipeIngredient) {
+        if (recipeIngredients == null) {
+            recipeIngredients = new ArrayList<>();
+        }
+        if (recipeIngredient == null) {
+            throw new IllegalArgumentException("recipeIngredient is null");
+        }
+
+        recipeIngredients.add(recipeIngredient);    // Adds ingredient to List<T>
+        recipeIngredient.setRecipe(this);           // Sets recipe field in RecipeIngredient
+    }
+
+    public void removeRecipeIngredient(RecipeIngredient recipeIngredient) {
+        if (recipeIngredients == null) {
+            recipeIngredients = new ArrayList<>();
+        }
+        if (recipeIngredient == null) {
+            throw new IllegalArgumentException("recipeIngredient is null");
+        }
+
+        recipeIngredients.remove(recipeIngredient); // Removes ingredient from List<T>
+        recipeIngredient.setRecipe(null);
+    }
+
+    public void addCategory(RecipeCategory recipeCategory) {
+        if (categories == null) {
+            categories = new ArrayList<>();
+        }
+        if (recipeCategory == null) {
+            throw new IllegalArgumentException("category is null");
+        }
+
+        categories.add(recipeCategory);             // Adds category to List<T>
+        recipeCategory.addRecipe(this);             // Adds recipe to List<T> in RecipeCategory
+    }
+
+    public void removeCategory(RecipeCategory recipeCategory) {
+        if (categories == null) {
+            categories = new ArrayList<>();
+        }
+        if (recipeCategory == null) {
+            throw new IllegalArgumentException("category is null");
+        }
+
+        categories.remove(recipeCategory);          // Removes category from List<T>
+        recipeCategory.removeRecipe(this);          // Removes recipe from List<T> in RecipeCategory
     }
 }
