@@ -4,7 +4,6 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
-import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
 import se.lexicon.teri.recipe_database.entities.*;
 
 import java.util.ArrayList;
@@ -19,34 +18,34 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 class RecipeRepositoryTest {
 
     @Autowired
-    private TestEntityManager entityManager;
-
-    @Autowired
     private RecipeRepository repository;
 
     private Recipe irishStew;
-    private Ingredient potato;
     private List<RecipeCategory> categoryList;
 
     @BeforeEach
     void setUp() {
-        potato = new Ingredient("Potato");
+        irishStew = new Recipe();
+        irishStew.setRecipeName("Irish Stew");
+
+        Ingredient potato = new Ingredient("Potato");
         Ingredient meat = new Ingredient("Meat");
         Ingredient stock = new Ingredient("Stock");
+
         RecipeIngredient ingredient1 = new RecipeIngredient(potato, 1, Measurement.KG, irishStew);
         RecipeIngredient ingredient2 = new RecipeIngredient(meat, 200, Measurement.G, irishStew);
         RecipeIngredient ingredient3 = new RecipeIngredient(stock, 3, Measurement.L, irishStew);
+
         List<RecipeIngredient> ingredientList = Arrays.asList(ingredient1, ingredient2, ingredient3);
+        irishStew.setIngredients(ingredientList);
 
         List<Recipe> recipeList = new ArrayList<>();
         recipeList.add(irishStew);
-        categoryList =new ArrayList<>();
-        categoryList.add(new RecipeCategory("Dinner", recipeList));
 
-        irishStew = new Recipe();
-        irishStew.setRecipeName("Irish Stew");
-        irishStew.setRecipeIngredients(ingredientList);
+        categoryList = new ArrayList<>();
+        categoryList.add(new RecipeCategory("Dinner", recipeList));
         irishStew.setCategories(categoryList);
+
         repository.save(irishStew);
     }
 
@@ -63,11 +62,21 @@ class RecipeRepositoryTest {
     }
 
     @Test
+    void findByRecipeIngredients() {
+
+        List<Recipe> result = repository.findByIngredients_Ingredient_IngredientNameIgnoreCase("potato");
+
+        if (!result.isEmpty()) {
+            assertTrue(result.contains(irishStew));
+        }
+    }
+
+    @Test
     void findByCategoriesIn() {
 
         List<Recipe> result = repository.findByCategoriesIn(categoryList);
 
-        if (result != null) {
+        if (!result.isEmpty()) {
             assertTrue(result.contains(irishStew));
         }
     }
@@ -77,7 +86,7 @@ class RecipeRepositoryTest {
 
         List<Recipe> result = repository.findByCategories_categoryIgnoreCase("dinner");
 
-        if (result != null) {
+        if (!result.isEmpty()) {
             assertTrue(result.contains(irishStew));
         }
     }

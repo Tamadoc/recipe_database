@@ -29,7 +29,7 @@ class RecipeTest {
         testObject.addRecipeIngredient(new RecipeIngredient(meat, 1,Measurement.KG, testObject));
         testObject.addRecipeIngredient(new RecipeIngredient(stock, 1,Measurement.KG, testObject));
 
-        long length = testObject.getRecipeIngredients().size();
+        long length = testObject.getIngredients().size();
         assertEquals(3, length);
     }
 
@@ -44,8 +44,8 @@ class RecipeTest {
         testObject.addRecipeIngredient(new RecipeIngredient(stock, 1,Measurement.KG, testObject));
 
         // test
-        testObject.removeRecipeIngredient(testObject.getRecipeIngredients().get(1));
-        long length = testObject.getRecipeIngredients().size();
+        testObject.removeRecipeIngredient(testObject.getIngredients().get(1));
+        long length = testObject.getIngredients().size();
         assertEquals(2, length);
     }
 

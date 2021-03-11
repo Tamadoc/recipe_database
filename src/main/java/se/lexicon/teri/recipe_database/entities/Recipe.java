@@ -23,7 +23,7 @@ public class Recipe {
             cascade = CascadeType.ALL,
             mappedBy = "recipe",
             orphanRemoval = true)
-    private List<RecipeIngredient> recipeIngredients;
+    private List<RecipeIngredient> ingredients;
 
     @ManyToMany(fetch = FetchType.LAZY,
             cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH})
@@ -36,10 +36,10 @@ public class Recipe {
     public Recipe() {
     }
 
-    public Recipe(String recipeName, RecipeInstruction recipeInstructions, List<RecipeIngredient> recipeIngredients, List<RecipeCategory> categories) {
+    public Recipe(String recipeName, RecipeInstruction recipeInstructions, List<RecipeIngredient> ingredients, List<RecipeCategory> categories) {
         this.recipeName = recipeName;
         this.recipeInstructions = recipeInstructions;
-        this.recipeIngredients = recipeIngredients;
+        this.ingredients = ingredients;
         this.categories = categories;
     }
 
@@ -60,12 +60,12 @@ public class Recipe {
         this.recipeName = recipeName;
     }
 
-    public List<RecipeIngredient> getRecipeIngredients() {
-        return recipeIngredients;
+    public List<RecipeIngredient> getIngredients() {
+        return ingredients;
     }
 
-    public void setRecipeIngredients(List<RecipeIngredient> recipeIngredients) {
-        this.recipeIngredients = recipeIngredients;
+    public void setIngredients(List<RecipeIngredient> recipeIngredients) {
+        this.ingredients = recipeIngredients;
     }
 
     public RecipeInstruction getRecipeInstructions() {
@@ -86,7 +86,7 @@ public class Recipe {
 
     @Override
     public int hashCode() {
-        return Objects.hash(recipeId, recipeName, recipeIngredients, recipeInstructions, categories);
+        return Objects.hash(recipeId, recipeName, ingredients, recipeInstructions, categories);
     }
 
     // Overrides
@@ -99,31 +99,31 @@ public class Recipe {
             return false;
         }
         Recipe recipe = (Recipe) o;
-        return recipeId == recipe.recipeId && Objects.equals(recipeName, recipe.recipeName) && Objects.equals(recipeIngredients, recipe.recipeIngredients) && Objects.equals(recipeInstructions, recipe.recipeInstructions) && Objects.equals(categories, recipe.categories);
+        return recipeId == recipe.recipeId && Objects.equals(recipeName, recipe.recipeName) && Objects.equals(ingredients, recipe.ingredients) && Objects.equals(recipeInstructions, recipe.recipeInstructions) && Objects.equals(categories, recipe.categories);
     }
 
     // Convenience methods
     public void addRecipeIngredient(RecipeIngredient recipeIngredient) {
-        if (recipeIngredients == null) {
-            recipeIngredients = new ArrayList<>();
+        if (ingredients == null) {
+            ingredients = new ArrayList<>();
         }
         if (recipeIngredient == null) {
             throw new IllegalArgumentException("recipeIngredient is null");
         }
 
-        recipeIngredients.add(recipeIngredient);    // Adds ingredient to List<T>
+        ingredients.add(recipeIngredient);    // Adds ingredient to List<T>
         recipeIngredient.setRecipe(this);           // Sets recipe field in RecipeIngredient
     }
 
     public void removeRecipeIngredient(RecipeIngredient recipeIngredient) {
-        if (recipeIngredients == null) {
-            recipeIngredients = new ArrayList<>();
+        if (ingredients == null) {
+            ingredients = new ArrayList<>();
         }
         if (recipeIngredient == null) {
             throw new IllegalArgumentException("recipeIngredient is null");
         }
 
-        recipeIngredients.remove(recipeIngredient); // Removes ingredient from List<T>
+        ingredients.remove(recipeIngredient); // Removes ingredient from List<T>
         recipeIngredient.setRecipe(null);
     }
 
