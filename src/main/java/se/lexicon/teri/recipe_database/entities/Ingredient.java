@@ -38,6 +38,11 @@ public class Ingredient {
         this.name = name;
     }
 
+    @Override
+    public int hashCode() {
+        return Objects.hash(ingredientId, name);
+    }
+
     // Overrides
     @Override
     public boolean equals(Object o) {
@@ -49,10 +54,5 @@ public class Ingredient {
         }
         Ingredient that = (Ingredient) o;
         return ingredientId == that.ingredientId && name.equals(that.name);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(ingredientId, name);
     }
 }

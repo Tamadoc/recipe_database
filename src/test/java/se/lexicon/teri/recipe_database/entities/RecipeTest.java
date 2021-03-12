@@ -4,7 +4,6 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
-import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
@@ -14,10 +13,7 @@ class RecipeTest {
 
     @BeforeEach
     void setUp() {
-        Instructions instruction = new Instructions("Put everything in pot and boil.");
-        List<Quantity> ingredients = new ArrayList<>();
-        List<Category> categories = new ArrayList<>();
-        testObject = new Recipe("Irish Stew", instruction, ingredients,  categories);
+        testObject = new Recipe("Irish Stew", "Put everything in pot and boil.");
     }
 
     @Test
@@ -25,9 +21,9 @@ class RecipeTest {
         Ingredient potato = new Ingredient("Potatoes");
         Ingredient meat = new Ingredient("Meat");
         Ingredient stock = new Ingredient("Stock");
-        testObject.addRecipeIngredient(new Quantity(1, Measurement.KG, potato, testObject));
-        testObject.addRecipeIngredient(new Quantity(250, Measurement.G, meat, testObject));
-        testObject.addRecipeIngredient(new Quantity(1, Measurement.L, stock, testObject));
+        testObject.addRecipeIngredient(new Quantity(1, Measurement.KG, potato));
+        testObject.addRecipeIngredient(new Quantity(1, Measurement.KG, meat));
+        testObject.addRecipeIngredient(new Quantity(1, Measurement.KG, stock));
 
         long length = testObject.getIngredients().size();
         assertEquals(3, length);
@@ -39,9 +35,9 @@ class RecipeTest {
         Ingredient potato = new Ingredient("Potatoes");
         Ingredient meat = new Ingredient("Meat");
         Ingredient stock = new Ingredient("Stock");
-        testObject.addRecipeIngredient(new Quantity(1, Measurement.KG, potato, testObject));
-        testObject.addRecipeIngredient(new Quantity(250, Measurement.G, meat, testObject));
-        testObject.addRecipeIngredient(new Quantity(1, Measurement.L, stock, testObject));
+        testObject.addRecipeIngredient(new Quantity(1, Measurement.KG, potato));
+        testObject.addRecipeIngredient(new Quantity(1, Measurement.KG, meat));
+        testObject.addRecipeIngredient(new Quantity(1, Measurement.KG, stock));
 
         // test
         testObject.removeRecipeIngredient(testObject.getIngredients().get(1));

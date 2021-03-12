@@ -3,46 +3,39 @@ package se.lexicon.teri.recipe_database.entities;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class CategoryTest {
 
-    Category testObject;
+    Category testCategory;
     Recipe recipe1, recipe2;
 
     @BeforeEach
     void setUp() {
-        Instructions instruction1 = new Instructions("Put everything in pot and boil.");
-        Instructions instruction2 = new Instructions("Stir-fry everything together.");
-        List<Quantity> ingredients = new ArrayList<>();
-        List<Category> categories = new ArrayList<>();
-        recipe1  = new Recipe("Irish Stew", instruction1, ingredients,  categories);
-        recipe2  = new Recipe("Stir-fried Chicken", instruction1, ingredients,  categories);
+        recipe1 = new Recipe("Irish Stew", "Put everything in pot and boil.");
+        recipe2 = new Recipe("Stir-fried Chicken", "Stir-fry everything together.");
 
-        testObject = new Category("Dinner", new ArrayList<>());
+        testCategory = new Category("Dinner");
     }
 
     @Test
     void addRecipe() {
-        testObject.addRecipe(recipe1);
-        testObject.addRecipe(recipe2);
+        testCategory.addRecipe(recipe1);
+        testCategory.addRecipe(recipe2);
 
-        long length = testObject.getRecipes().size();
+        long length = testCategory.getRecipes().size();
         assertEquals(2, length);
     }
 
     @Test
     void removeRecipe() {
         // set up
-        testObject.addRecipe(recipe1);
-        testObject.addRecipe(recipe2);
+        testCategory.addRecipe(recipe1);
+        testCategory.addRecipe(recipe2);
 
         //test
-        testObject.removeRecipe(recipe2);
-        long length = testObject.getRecipes().size();
+        testCategory.removeRecipe(recipe2);
+        long length = testCategory.getRecipes().size();
         assertEquals(1, length);
     }
 }

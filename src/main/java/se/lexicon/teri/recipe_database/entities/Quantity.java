@@ -9,7 +9,7 @@ public class Quantity {
 
     @Id
     @GeneratedValue
-    private UUID quantityId;
+    private UUID recipeIngredientId;
 
     @Column(nullable = false)
     private double amount;
@@ -31,6 +31,12 @@ public class Quantity {
     public Quantity() {
     }
 
+    public Quantity(double amount, Measurement measurement, Ingredient ingredient) {
+        this.ingredient = ingredient;
+        this.amount = amount;
+        this.measurement = measurement;
+    }
+
     public Quantity(double amount, Measurement measurement, Ingredient ingredient, Recipe recipe) {
         this.ingredient = ingredient;
         this.amount = amount;
@@ -39,12 +45,20 @@ public class Quantity {
     }
 
     // Getters and setters
-    public UUID getQuantityId() {
-        return quantityId;
+    public UUID getRecipeIngredientId() {
+        return recipeIngredientId;
     }
 
-    public void setQuantityId(UUID recipeIngredientId) {
-        this.quantityId = recipeIngredientId;
+    public void setRecipeIngredientId(UUID recipeIngredientId) {
+        this.recipeIngredientId = recipeIngredientId;
+    }
+
+    public Ingredient getIngredient() {
+        return ingredient;
+    }
+
+    public void setIngredient(Ingredient ingredient) {
+        this.ingredient = ingredient;
     }
 
     public double getAmount() {
@@ -63,14 +77,6 @@ public class Quantity {
         this.measurement = measurement;
     }
 
-    public Ingredient getIngredient() {
-        return ingredient;
-    }
-
-    public void setIngredient(Ingredient ingredient) {
-        this.ingredient = ingredient;
-    }
-
     public Recipe getRecipe() {
         return recipe;
     }
@@ -81,7 +87,7 @@ public class Quantity {
 
     @Override
     public int hashCode() {
-        return Objects.hash(quantityId, ingredient, amount, measurement, recipe);
+        return Objects.hash(recipeIngredientId, ingredient, amount, measurement, recipe);
     }
 
     // Overrides
@@ -94,6 +100,6 @@ public class Quantity {
             return false;
         }
         Quantity that = (Quantity) o;
-        return Double.compare(that.amount, amount) == 0 && Objects.equals(quantityId, that.quantityId) && Objects.equals(ingredient, that.ingredient) && measurement == that.measurement && Objects.equals(recipe, that.recipe);
+        return Double.compare(that.amount, amount) == 0 && Objects.equals(recipeIngredientId, that.recipeIngredientId) && Objects.equals(ingredient, that.ingredient) && measurement == that.measurement && Objects.equals(recipe, that.recipe);
     }
 }

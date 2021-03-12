@@ -15,9 +15,8 @@ public class Recipe {
     @Column(nullable = false)
     private String title;
 
-    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    @JoinColumn(name = "instruction_id")
-    private Instructions instructions;
+    @Column
+    private String instructions;
 
     @OneToMany(fetch = FetchType.LAZY,
             cascade = CascadeType.ALL,
@@ -36,7 +35,12 @@ public class Recipe {
     public Recipe() {
     }
 
-    public Recipe(String title, Instructions instructions, List<Quantity> ingredients, List<Category> categories) {
+    public Recipe(String title, String instructions) {
+        this.title = title;
+        this.instructions = instructions;
+    }
+
+    public Recipe(String title, String instructions, List<Quantity> ingredients, List<Category> categories) {
         this.title = title;
         this.instructions = instructions;
         this.ingredients = ingredients;
@@ -60,20 +64,20 @@ public class Recipe {
         this.title = recipeName;
     }
 
+    public String getInstructions() {
+        return instructions;
+    }
+
+    public void setInstructions(String instructions) {
+        this.instructions = instructions;
+    }
+
     public List<Quantity> getIngredients() {
         return ingredients;
     }
 
     public void setIngredients(List<Quantity> quantities) {
         this.ingredients = quantities;
-    }
-
-    public Instructions getInstructions() {
-        return instructions;
-    }
-
-    public void setInstructions(Instructions instructions) {
-        this.instructions = instructions;
     }
 
     public List<Category> getCategories() {
@@ -84,12 +88,12 @@ public class Recipe {
         this.categories = categories;
     }
 
+    // Overrides
     @Override
     public int hashCode() {
-        return Objects.hash(recipeId, title, ingredients, instructions, categories);
+        return Objects.hash(recipeId, title, instructions, ingredients, categories);
     }
 
-    // Overrides
     @Override
     public boolean equals(Object o) {
         if (this == o) {
@@ -99,7 +103,7 @@ public class Recipe {
             return false;
         }
         Recipe recipe = (Recipe) o;
-        return recipeId == recipe.recipeId && Objects.equals(title, recipe.title) && Objects.equals(ingredients, recipe.ingredients) && Objects.equals(instructions, recipe.instructions) && Objects.equals(categories, recipe.categories);
+        return recipeId == recipe.recipeId && Objects.equals(title, recipe.title) && Objects.equals(instructions, recipe.instructions) && Objects.equals(ingredients, recipe.ingredients) && Objects.equals(categories, recipe.categories);
     }
 
     // Convenience methods
@@ -111,8 +115,8 @@ public class Recipe {
             throw new IllegalArgumentException("recipeIngredient is null");
         }
 
-        ingredients.add(quantity);    // Adds ingredient to List<T>
-        quantity.setRecipe(this);           // Sets recipe field in RecipeIngredient
+        ingredients.add(quantity);
+        quantity.setRecipe(this);
     }
 
     public void removeRecipeIngredient(Quantity quantity) {
@@ -123,7 +127,7 @@ public class Recipe {
             throw new IllegalArgumentException("recipeIngredient is null");
         }
 
-        ingredients.remove(quantity); // Removes ingredient from List<T>
+        ingredients.remove(quantity);
         quantity.setRecipe(null);
     }
 
@@ -135,8 +139,8 @@ public class Recipe {
             throw new IllegalArgumentException("category is null");
         }
 
-        categories.add(category);             // Adds category to List<T>
-        category.addRecipe(this);             // Adds recipe to List<T> in RecipeCategory
+        categories.add(category);
+        category.addRecipe(this);
     }
 
     public void removeCategory(Category category) {
@@ -147,7 +151,7 @@ public class Recipe {
             throw new IllegalArgumentException("category is null");
         }
 
-        categories.remove(category);          // Removes category from List<T>
-        category.removeRecipe(this);          // Removes recipe from List<T> in RecipeCategory
+        categories.remove(category);
+        category.removeRecipe(this);
     }
 }

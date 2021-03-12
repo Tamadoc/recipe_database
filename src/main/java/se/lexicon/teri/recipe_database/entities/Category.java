@@ -26,6 +26,10 @@ public class Category {
     public Category() {
     }
 
+    public Category(String category) {
+        this.category = category;
+    }
+
     public Category(String category, List<Recipe> recipes) {
         this.category = category;
         this.recipes = recipes;
@@ -36,8 +40,8 @@ public class Category {
         return categoryId;
     }
 
-    public void setCategoryId(int categoryId) {
-        this.categoryId = categoryId;
+    public void setCategoryId(int recipeCategoryId) {
+        this.categoryId = recipeCategoryId;
     }
 
     public String getCategory() {
@@ -56,6 +60,11 @@ public class Category {
         this.recipes = recipes;
     }
 
+    @Override
+    public int hashCode() {
+        return Objects.hash(categoryId, category, recipes);
+    }
+
     // Overrides
     @Override
     public boolean equals(Object o) {
@@ -69,17 +78,14 @@ public class Category {
         return categoryId == that.categoryId && Objects.equals(category, that.category) && Objects.equals(recipes, that.recipes);
     }
 
-    @Override
-    public int hashCode() {
-        return Objects.hash(categoryId, category, recipes);
-    }
-
     // Convenience methods
     public void addRecipe(Recipe recipe) {
         if (recipes == null) {
             recipes = new ArrayList<>();
         }
-        if (recipe == null) throw new IllegalArgumentException("recipe is null");
+        if (recipe == null) {
+            throw new IllegalArgumentException("recipe is null");
+        }
 
         recipes.add(recipe);
     }
@@ -88,7 +94,9 @@ public class Category {
         if (recipes == null) {
             recipes = new ArrayList<>();
         }
-        if (recipe == null) throw new IllegalArgumentException("recipe is null");
+        if (recipe == null) {
+            throw new IllegalArgumentException("recipe is null");
+        }
 
         recipes.remove(recipe);
     }

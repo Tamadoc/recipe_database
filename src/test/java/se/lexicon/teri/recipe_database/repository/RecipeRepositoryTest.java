@@ -7,11 +7,8 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import se.lexicon.teri.recipe_database.entities.*;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
-import java.util.Optional;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @DataJpaTest
@@ -25,46 +22,28 @@ class RecipeRepositoryTest {
 
     @BeforeEach
     void setUp() {
-        irishStew = new Recipe();
-        irishStew.setTitle("Irish Stew");
-
         Ingredient potato = new Ingredient("Potato");
         Ingredient meat = new Ingredient("Meat");
         Ingredient stock = new Ingredient("Stock");
+        Category dinner = new Category("Dinner");
 
-        Quantity ingredient1 = new Quantity(1, Measurement.KG, potato, irishStew);
-        Quantity ingredient2 = new Quantity(250, Measurement.G, meat, irishStew);
-        Quantity ingredient3 = new Quantity(1, Measurement.L, stock, irishStew);
-
-        List<Quantity> ingredientList = Arrays.asList(ingredient1, ingredient2, ingredient3);
-        irishStew.setIngredients(ingredientList);
-
-        List<Recipe> recipeList = new ArrayList<>();
-        recipeList.add(irishStew);
+        irishStew = new Recipe();
+        irishStew.setTitle("Irish Stew");
+        irishStew.setInstructions("Put everything in a pot and boil");
+        irishStew.addRecipeIngredient(new Quantity(1, Measurement.KG, potato));
+        irishStew.addRecipeIngredient(new Quantity(200, Measurement.G, meat));
+        irishStew.addRecipeIngredient(new Quantity(3, Measurement.L, stock));
+        irishStew.addCategory(dinner);
+        repository.save(irishStew);
 
         categoryList = new ArrayList<>();
-        categoryList.add(new Category("Dinner", recipeList));
-        irishStew.setCategories(categoryList);
-
-        repository.save(irishStew);
+        categoryList.add(dinner);
     }
 
     @Test
-    void test_findByRecipeTitle() {
+    void test_findByRecipeNameContainsIgnoreCase() {
 
-        Optional<Recipe> result = repository.findByTitleContainsIgnoreCase("irish");
-
-        if (result.isPresent()) {
-            String expected = irishStew.getTitle();
-            String actual = result.get().getTitle();
-            assertEquals(expected, actual);
-        }
-    }
-
-    @Test
-    void test_findByIngredient() {
-
-        List<Recipe> result = repository.findByIngredients_Ingredient_NameContainsIgnoreCase("pot");
+        List<Recipe> result = repository.findByTitleContainsIgnoreCase("iri");
 
         if (!result.isEmpty()) {
             assertTrue(result.contains(irishStew));
@@ -72,7 +51,17 @@ class RecipeRepositoryTest {
     }
 
     @Test
-    void test_findByCategories() {
+    void findByRecipeIngredients() {
+
+        List<Recipe> result = repository.findByIngredients_Ingredient_NameIgnoreCase("pot");
+
+        if (!result.isEmpty()) {
+            assertTrue(result.contains(irishStew));
+        }
+    }
+
+    @Test
+    void findByCategoriesIn() {
 
         List<Recipe> result = repository.findByCategoriesIn(categoryList);
 
@@ -82,9 +71,9 @@ class RecipeRepositoryTest {
     }
 
     @Test
-    void test_findByCategory() {
+    void findByCategories_categoryIgnoreCase() {
 
-        List<Recipe> result = repository.findByCategories_categoryContainsIgnoreCase("din");
+        List<Recipe> result = repository.findByCategories_categoryIgnoreCase("din");
 
         if (!result.isEmpty()) {
             assertTrue(result.contains(irishStew));

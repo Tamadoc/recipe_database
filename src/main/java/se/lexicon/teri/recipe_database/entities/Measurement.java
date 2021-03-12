@@ -10,7 +10,8 @@ public enum Measurement {
     ML("Millilitre"),
     SMALL("Small"),
     MEDIUM("Medium"),
-    LARGE("Large");
+    LARGE("Large"),
+    ITEM("");
 
     public final String label;
 
