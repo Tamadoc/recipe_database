@@ -5,21 +5,21 @@ import java.util.Objects;
 import java.util.UUID;
 
 @Entity
-public class RecipeInstruction {
+public class Instructions {
 
     @Id
     @GeneratedValue
     private UUID instructionId;
 
     @Column(nullable = false, length = 1500)
-    private String instructions;
+    private String text;
 
     // Constructors
-    public RecipeInstruction() {
+    public Instructions() {
     }
 
-    public RecipeInstruction(String instructions) {
-        this.instructions = instructions;
+    public Instructions(String text) {
+        this.text = text;
     }
 
     // Getters and setters
@@ -31,12 +31,12 @@ public class RecipeInstruction {
         this.instructionId = instructionId;
     }
 
-    public String getInstructions() {
-        return instructions;
+    public String getText() {
+        return text;
     }
 
-    public void setInstructions(String instructions) {
-        this.instructions = instructions;
+    public void setText(String text) {
+        this.text = text;
     }
 
     // Overrides
@@ -48,12 +48,12 @@ public class RecipeInstruction {
         if (o == null || getClass() != o.getClass()) {
             return false;
         }
-        RecipeInstruction that = (RecipeInstruction) o;
-        return Objects.equals(instructionId, that.instructionId) && Objects.equals(instructions, that.instructions);
+        Instructions that = (Instructions) o;
+        return Objects.equals(instructionId, that.instructionId) && Objects.equals(text, that.text);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(instructionId, instructions);
+        return Objects.hash(instructionId, text);
     }
 }

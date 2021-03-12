@@ -1,10 +1,8 @@
 package se.lexicon.teri.recipe_database.repository;
 
 import org.springframework.data.repository.CrudRepository;
-import se.lexicon.teri.recipe_database.entities.Ingredient;
 import se.lexicon.teri.recipe_database.entities.Recipe;
-import se.lexicon.teri.recipe_database.entities.RecipeCategory;
-import se.lexicon.teri.recipe_database.entities.RecipeIngredient;
+import se.lexicon.teri.recipe_database.entities.Category;
 
 import java.util.List;
 import java.util.Optional;
@@ -21,15 +19,15 @@ public interface RecipeRepository extends CrudRepository<Recipe, Integer> {
     */
 
     // Search for recipes by name
-    Optional<Recipe> findByRecipeNameContainsIgnoreCase(String recipeName);
+    Optional<Recipe> findByTitleContainsIgnoreCase(String recipeName);
 
-    // Search for recipes containing a specific ingredient by ingredientName
-    List<Recipe> findByIngredients_Ingredient_IngredientNameIgnoreCase(String ingredientName);
+    // Search for recipes containing a specific ingredient by ingredient name
+    List<Recipe> findByIngredients_Ingredient_NameContainsIgnoreCase(String ingredientName);
 
     // Search for recipes that match one or more categories
-    List<Recipe> findByCategoriesIn(List<RecipeCategory> categoryList);
+    List<Recipe> findByCategoriesIn(List<Category> categoryList);
 
     // Search for recipes in a specific category
-    List<Recipe> findByCategories_categoryIgnoreCase(String category);
+    List<Recipe> findByCategories_categoryContainsIgnoreCase(String category);
 
 }

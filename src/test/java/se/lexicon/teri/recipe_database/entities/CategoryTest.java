@@ -8,21 +8,21 @@ import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-class RecipeCategoryTest {
+class CategoryTest {
 
-    RecipeCategory testObject;
+    Category testObject;
     Recipe recipe1, recipe2;
 
     @BeforeEach
     void setUp() {
-        RecipeInstruction instruction1 = new RecipeInstruction("Put everything in pot and boil.");
-        RecipeInstruction instruction2 = new RecipeInstruction("Stir-fry everything together.");
-        List<RecipeIngredient> ingredients = new ArrayList<>();
-        List<RecipeCategory> categories = new ArrayList<>();
+        Instructions instruction1 = new Instructions("Put everything in pot and boil.");
+        Instructions instruction2 = new Instructions("Stir-fry everything together.");
+        List<Quantity> ingredients = new ArrayList<>();
+        List<Category> categories = new ArrayList<>();
         recipe1  = new Recipe("Irish Stew", instruction1, ingredients,  categories);
         recipe2  = new Recipe("Stir-fried Chicken", instruction1, ingredients,  categories);
 
-        testObject = new RecipeCategory("Dinner", new ArrayList<>());
+        testObject = new Category("Dinner", new ArrayList<>());
     }
 
     @Test

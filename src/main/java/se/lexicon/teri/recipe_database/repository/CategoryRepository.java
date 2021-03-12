@@ -1,9 +1,9 @@
 package se.lexicon.teri.recipe_database.repository;
 
 import org.springframework.data.repository.CrudRepository;
-import se.lexicon.teri.recipe_database.entities.RecipeCategory;
+import se.lexicon.teri.recipe_database.entities.Category;
 
-public interface RecipeCategoryRepository extends CrudRepository<RecipeCategory, Integer> {
+public interface CategoryRepository extends CrudRepository<Category, Integer> {
     /*
     saveAll
     findById

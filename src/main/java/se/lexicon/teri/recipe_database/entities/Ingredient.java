@@ -11,14 +11,14 @@ public class Ingredient {
     private int ingredientId;
 
     @Column(nullable = false)
-    private String ingredientName;
+    private String name;
 
     // Constructors
     public Ingredient() {
     }
 
-    public Ingredient(String ingredientName) {
-        this.ingredientName = ingredientName;
+    public Ingredient(String name) {
+        this.name = name;
     }
 
     // Getters and setters
@@ -30,12 +30,12 @@ public class Ingredient {
         this.ingredientId = id;
     }
 
-    public String getIngredientName() {
-        return ingredientName;
+    public String getName() {
+        return name;
     }
 
-    public void setIngredientName(String name) {
-        this.ingredientName = name;
+    public void setName(String name) {
+        this.name = name;
     }
 
     // Overrides
@@ -48,11 +48,11 @@ public class Ingredient {
             return false;
         }
         Ingredient that = (Ingredient) o;
-        return ingredientId == that.ingredientId && ingredientName.equals(that.ingredientName);
+        return ingredientId == that.ingredientId && name.equals(that.name);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(ingredientId, ingredientName);
+        return Objects.hash(ingredientId, name);
     }
 }

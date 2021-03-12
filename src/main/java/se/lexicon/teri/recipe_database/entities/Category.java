@@ -6,7 +6,7 @@ import java.util.List;
 import java.util.Objects;
 
 @Entity
-public class RecipeCategory {
+public class Category {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -23,10 +23,10 @@ public class RecipeCategory {
     private List<Recipe> recipes;
 
     // Constructors
-    public RecipeCategory() {
+    public Category() {
     }
 
-    public RecipeCategory(String category, List<Recipe> recipes) {
+    public Category(String category, List<Recipe> recipes) {
         this.category = category;
         this.recipes = recipes;
     }
@@ -36,8 +36,8 @@ public class RecipeCategory {
         return categoryId;
     }
 
-    public void setCategoryId(int recipeCategoryId) {
-        this.categoryId = recipeCategoryId;
+    public void setCategoryId(int categoryId) {
+        this.categoryId = categoryId;
     }
 
     public String getCategory() {
@@ -65,7 +65,7 @@ public class RecipeCategory {
         if (o == null || getClass() != o.getClass()) {
             return false;
         }
-        RecipeCategory that = (RecipeCategory) o;
+        Category that = (Category) o;
         return categoryId == that.categoryId && Objects.equals(category, that.category) && Objects.equals(recipes, that.recipes);
     }
 

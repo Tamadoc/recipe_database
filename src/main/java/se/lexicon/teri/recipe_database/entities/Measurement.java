@@ -8,7 +8,9 @@ public enum Measurement {
     L("Litre"),
     DL("Decilitre"),
     ML("Millilitre"),
-    PCS("Pieces");
+    SMALL("Small"),
+    MEDIUM("Medium"),
+    LARGE("Large");
 
     public final String label;
 

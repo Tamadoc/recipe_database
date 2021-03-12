@@ -14,9 +14,9 @@ class RecipeTest {
 
     @BeforeEach
     void setUp() {
-        RecipeInstruction instruction = new RecipeInstruction("Put everything in pot and boil.");
-        List<RecipeIngredient> ingredients = new ArrayList<>();
-        List<RecipeCategory> categories = new ArrayList<>();
+        Instructions instruction = new Instructions("Put everything in pot and boil.");
+        List<Quantity> ingredients = new ArrayList<>();
+        List<Category> categories = new ArrayList<>();
         testObject = new Recipe("Irish Stew", instruction, ingredients,  categories);
     }
 
@@ -25,9 +25,9 @@ class RecipeTest {
         Ingredient potato = new Ingredient("Potatoes");
         Ingredient meat = new Ingredient("Meat");
         Ingredient stock = new Ingredient("Stock");
-        testObject.addRecipeIngredient(new RecipeIngredient(potato, 1,Measurement.KG, testObject));
-        testObject.addRecipeIngredient(new RecipeIngredient(meat, 1,Measurement.KG, testObject));
-        testObject.addRecipeIngredient(new RecipeIngredient(stock, 1,Measurement.KG, testObject));
+        testObject.addRecipeIngredient(new Quantity(1, Measurement.KG, potato, testObject));
+        testObject.addRecipeIngredient(new Quantity(250, Measurement.G, meat, testObject));
+        testObject.addRecipeIngredient(new Quantity(1, Measurement.L, stock, testObject));
 
         long length = testObject.getIngredients().size();
         assertEquals(3, length);
@@ -39,9 +39,9 @@ class RecipeTest {
         Ingredient potato = new Ingredient("Potatoes");
         Ingredient meat = new Ingredient("Meat");
         Ingredient stock = new Ingredient("Stock");
-        testObject.addRecipeIngredient(new RecipeIngredient(potato, 1,Measurement.KG, testObject));
-        testObject.addRecipeIngredient(new RecipeIngredient(meat, 1,Measurement.KG, testObject));
-        testObject.addRecipeIngredient(new RecipeIngredient(stock, 1,Measurement.KG, testObject));
+        testObject.addRecipeIngredient(new Quantity(1, Measurement.KG, potato, testObject));
+        testObject.addRecipeIngredient(new Quantity(250, Measurement.G, meat, testObject));
+        testObject.addRecipeIngredient(new Quantity(1, Measurement.L, stock, testObject));
 
         // test
         testObject.removeRecipeIngredient(testObject.getIngredients().get(1));
@@ -51,8 +51,8 @@ class RecipeTest {
 
     @Test
     void addCategory() {
-        RecipeCategory breakfast = new RecipeCategory("Breakfast", new ArrayList<>());
-        RecipeCategory dinner = new RecipeCategory("Dinner", new ArrayList<>());
+        Category breakfast = new Category("Breakfast", new ArrayList<>());
+        Category dinner = new Category("Dinner", new ArrayList<>());
         testObject.addCategory(breakfast);
         testObject.addCategory(dinner);
 
@@ -64,8 +64,8 @@ class RecipeTest {
     @Test
     void removeCategory() {
         // set up
-        RecipeCategory breakfast = new RecipeCategory("Breakfast", new ArrayList<>());
-        RecipeCategory dinner = new RecipeCategory("Dinner", new ArrayList<>());
+        Category breakfast = new Category("Breakfast", new ArrayList<>());
+        Category dinner = new Category("Dinner", new ArrayList<>());
         testObject.addCategory(breakfast);
         testObject.addCategory(dinner);
 

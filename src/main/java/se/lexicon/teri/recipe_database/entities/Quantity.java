@@ -5,16 +5,11 @@ import java.util.Objects;
 import java.util.UUID;
 
 @Entity
-public class RecipeIngredient {
+public class Quantity {
 
     @Id
     @GeneratedValue
-    private UUID recipeIngredientId;
-
-    @ManyToOne(fetch = FetchType.LAZY,
-            cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH})
-    @JoinColumn(name = "ingredient_id")
-    private Ingredient ingredient;
+    private UUID quantityId;
 
     @Column(nullable = false)
     private double amount;
@@ -24,14 +19,19 @@ public class RecipeIngredient {
 
     @ManyToOne(fetch = FetchType.LAZY,
             cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH})
+    @JoinColumn(name = "ingredient_id")
+    private Ingredient ingredient;
+
+    @ManyToOne(fetch = FetchType.LAZY,
+            cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH})
     @JoinColumn(name = "recipe_id")
     private Recipe recipe;
 
     // Constructors
-    public RecipeIngredient() {
+    public Quantity() {
     }
 
-    public RecipeIngredient(Ingredient ingredient, double amount, Measurement measurement, Recipe recipe) {
+    public Quantity(double amount, Measurement measurement, Ingredient ingredient, Recipe recipe) {
         this.ingredient = ingredient;
         this.amount = amount;
         this.measurement = measurement;
@@ -39,20 +39,12 @@ public class RecipeIngredient {
     }
 
     // Getters and setters
-    public UUID getRecipeIngredientId() {
-        return recipeIngredientId;
+    public UUID getQuantityId() {
+        return quantityId;
     }
 
-    public void setRecipeIngredientId(UUID recipeIngredientId) {
-        this.recipeIngredientId = recipeIngredientId;
-    }
-
-    public Ingredient getIngredient() {
-        return ingredient;
-    }
-
-    public void setIngredient(Ingredient ingredient) {
-        this.ingredient = ingredient;
+    public void setQuantityId(UUID recipeIngredientId) {
+        this.quantityId = recipeIngredientId;
     }
 
     public double getAmount() {
@@ -71,6 +63,14 @@ public class RecipeIngredient {
         this.measurement = measurement;
     }
 
+    public Ingredient getIngredient() {
+        return ingredient;
+    }
+
+    public void setIngredient(Ingredient ingredient) {
+        this.ingredient = ingredient;
+    }
+
     public Recipe getRecipe() {
         return recipe;
     }
@@ -81,7 +81,7 @@ public class RecipeIngredient {
 
     @Override
     public int hashCode() {
-        return Objects.hash(recipeIngredientId, ingredient, amount, measurement, recipe);
+        return Objects.hash(quantityId, ingredient, amount, measurement, recipe);
     }
 
     // Overrides
@@ -93,7 +93,7 @@ public class RecipeIngredient {
         if (o == null || getClass() != o.getClass()) {
             return false;
         }
-        RecipeIngredient that = (RecipeIngredient) o;
-        return Double.compare(that.amount, amount) == 0 && Objects.equals(recipeIngredientId, that.recipeIngredientId) && Objects.equals(ingredient, that.ingredient) && measurement == that.measurement && Objects.equals(recipe, that.recipe);
+        Quantity that = (Quantity) o;
+        return Double.compare(that.amount, amount) == 0 && Objects.equals(quantityId, that.quantityId) && Objects.equals(ingredient, that.ingredient) && measurement == that.measurement && Objects.equals(recipe, that.recipe);
     }
 }
